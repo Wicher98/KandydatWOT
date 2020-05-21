@@ -33,18 +33,19 @@ namespace KandydatWOT.Models
                     {
                         while (reader.Read())
                         {
-                            Console.Write(reader.GetString(0));
+                            /*Console.Write(reader.GetString(0));
                             Console.Write("\n");
                             Console.Write(user);
                             Console.Write("\n");
                             Console.Write(reader.GetString(1));
                             Console.Write("\n");
                             Console.Write(password);
-                            Console.Write("\n");
+                            Console.Write("\n");*/
+                            Console.WriteLine("{0} {1}", reader.GetString(0), reader.GetString(1));
                             var temp = reader.GetString(0);
                             if (String.Equals(temp,user))
                             {
-                                Console.Write("Mam krwa konto");
+                                Console.WriteLine("Mam krwa konto");
                                 return true;
                             }
                         }

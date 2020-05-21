@@ -10,44 +10,48 @@ namespace KandydatWOT.Controllers
 {
     public class LoginController : Controller
     {
+        SqlConnection con = new SqlConnection();
+        SqlCommand com = new SqlCommand();
+        SqlDataReader dr;
+        
         // GET
         public ActionResult Login_Page()
         {
             return View();
         }
-
-        public ActionResult Dashboard()
+        
+        void connectionString()
         {
-            string btnClick = Request["LoginBtn"];
-            string userName;
-            string password;
-            if (btnClick == "Login")
-            {
-                userName = Request["username"];
-                password = Request["password"];
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = "dwot.database.windows.net";
+            builder.UserID = "patryk";
+            builder.Password = "C3AIo*8s?tUq?d#*as8g";
+            builder.InitialCatalog = "Kandydaci";
 
-                Session["userName"] = userName;
-                Session["password"] = password;
-                
+            con.ConnectionString = builder.ToString();
+        }
+        
+        public ActionResult Dashboard(Account acc)
+        {
+            acc.Name = Request["username"];
+            acc.Password = Request["password"];
+            
+            connectionString();
+            con.Open();
+            com.Connection = con;
+            com.CommandText = "select * from uzytkownicy where email="+"'"+acc.Name+"' and haslo='"+acc.Password+"'"; 
+            dr = com.ExecuteReader();
+            if (dr.Read())
+            {
+                Session["userName"] = acc.Name;
+                con.Close();
             }
             else
             {
-                Session["userName"] = "dupa";
+                Session["userName"] = "Nie ma usera";
+                con.Close();
+                
             }
-            
-            DbConnector connector = new DbConnector();
-            
-                if (connector.try_login(Session["userName"].ToString() , Session["password"].ToString()))
-                {
-                    Console.Write("Mamy usera");
-                }
-                else
-                {
-                    Console.Write("Nie masz konta");
-                }
-            
-            
-
             return View();
         }
     
