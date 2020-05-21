@@ -9,10 +9,10 @@
             <div class="account-wall">
                 <img class="profile-img" src="../../favicon.ico"
                     alt="">
-                <form class="form-signin">
-                <input type="text" class="form-control" placeholder="Nazwa użytkownika" required autofocus>
-                <input type="password" class="form-control" placeholder="Hasło" required>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                <form class="form-signin" action="@Url.Action("Dashboard")">
+                <input type="text" class="form-control" placeholder="Nazwa użytkownika" required autofocus name="username">
+                <input type="password" class="form-control" placeholder="Hasło" required name="password">
+                <button class="btn btn-lg btn-primary btn-block" type="submit" name="LoginBtn" value="Login">
                     Zaloguj się</button>
                 
                 <a href="#" class="pull-right need-help">Potrzebujesz pomocy? </a><span class="clearfix"></span>
