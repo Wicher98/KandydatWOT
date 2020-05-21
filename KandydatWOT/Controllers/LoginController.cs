@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using System.Web.Mvc;
+using KandydatWOT.Models;
 
 namespace KandydatWOT.Controllers
 {
@@ -18,10 +19,12 @@ namespace KandydatWOT.Controllers
         public ActionResult Dashboard()
         {
             string btnClick = Request["LoginBtn"];
+            string userName;
+            string password;
             if (btnClick == "Login")
             {
-                string userName = Request["username"];
-                string password = Request["password"];
+                userName = Request["username"];
+                password = Request["password"];
 
                 Session["userName"] = userName;
                 Session["password"] = password;
@@ -32,44 +35,18 @@ namespace KandydatWOT.Controllers
                 Session["userName"] = "dupa";
             }
             
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            builder.DataSource = "dwot.database.windows.net"; 
-            builder.UserID = "patryk";            
-            builder.Password = "C3AIo*8s?tUq?d#*as8g";     
-            builder.InitialCatalog = "kandydaci";
+            DbConnector connector = new DbConnector();
             
-            try 
-            {
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                if (connector.try_login(Session["userName"].ToString() , Session["password"].ToString()))
                 {
-                    Console.WriteLine("\nQuery data example:");
-                    Console.WriteLine("=========================================\n");
-
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append("SELECT * from Kandydaci.dbo.Uzytkownicy ");
-                    /*sb.Append("FROM [SalesLT].[ProductCategory] pc ");
-                    sb.Append("JOIN [SalesLT].[Product] p ");
-                    sb.Append("ON pc.productcategoryid = p.productcategoryid;");*/
-                    String sql = sb.ToString();
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        connection.Open();
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                Console.WriteLine("{0} {1}", reader.GetString(0), reader.GetString(1));
-                            }
-                        }
-                    }                    
+                    Console.Write("Mamy usera");
                 }
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e.ToString() + "blad sql");
-            }
-            Console.ReadLine();
+                else
+                {
+                    Console.Write("Nie masz konta");
+                }
+            
+            
 
             return View();
         }

@@ -73,3 +73,5 @@
 /Users/maciejdybowski/RiderProjects/KandydatWOT/KandydatWOT/obj/Debug/KandydatWOT.csproj.CopyComplete
 /Users/maciejdybowski/RiderProjects/KandydatWOT/KandydatWOT/obj/Debug/KandydatWOT.dll
 /Users/maciejdybowski/RiderProjects/KandydatWOT/KandydatWOT/obj/Debug/KandydatWOT.pdb
+/Users/maciejdybowski/RiderProjects/KandydatWOT/KandydatWOT/bin/System.Data.SqlClient.dll
+/Users/maciejdybowski/RiderProjects/KandydatWOT/KandydatWOT/bin/System.Data.SqlClient.xml
