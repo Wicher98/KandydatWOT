@@ -4,74 +4,57 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using System.Web.Mvc;
+using KandydatWOT.Models;
 
 namespace KandydatWOT.Controllers
 {
     public class LoginController : Controller
     {
+        SqlConnection con = new SqlConnection();
+        SqlCommand com = new SqlCommand();
+        SqlDataReader dr;
+        
         // GET
         public ActionResult Login_Page()
         {
             return View();
         }
-
-        public ActionResult Dashboard()
+        
+        void connectionString()
         {
-            string btnClick = Request["LoginBtn"];
-            if (btnClick == "Login")
-            {
-                string userName = Request["username"];
-                string password = Request["password"];
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = "dwot.database.windows.net";
+            builder.UserID = "patryk";
+            builder.Password = "C3AIo*8s?tUq?d#*as8g";
+            builder.InitialCatalog = "Kandydaci";
 
-                Session["userName"] = userName;
-                Session["password"] = password;
-                
+            con.ConnectionString = builder.ToString();
+        }
+        
+        public ActionResult Dashboard(Account acc)
+        {
+            acc.Email = Request["username"];
+            acc.Password = Request["password"];
+            
+            connectionString();
+            con.Open();
+            com.Connection = con;
+            com.CommandText = "select * from uzytkownicy where email="+"'"+acc.Email+"' and haslo='"+acc.Password+"'"; 
+            dr = com.ExecuteReader();
+            if (dr.Read())
+            {
+                Session["userName"] = acc.Email;
+                con.Close();
+                return View("Dashboard");
             }
             else
             {
-                Session["userName"] = "dupa";
-            }
-            
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            builder.DataSource = "dwot.database.windows.net"; 
-            builder.UserID = "patryk";            
-            builder.Password = "C3AIo*8s?tUq?d#*as8g";     
-            builder.InitialCatalog = "kandydaci";
-            
-            try 
-            {
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
-                    Console.WriteLine("\nQuery data example:");
-                    Console.WriteLine("=========================================\n");
+                Session["userName"] = "Nie ma usera";
+                con.Close();
+                return View("Login_Failed");
 
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append("SELECT * from Kandydaci.dbo.Uzytkownicy ");
-                    /*sb.Append("FROM [SalesLT].[ProductCategory] pc ");
-                    sb.Append("JOIN [SalesLT].[Product] p ");
-                    sb.Append("ON pc.productcategoryid = p.productcategoryid;");*/
-                    String sql = sb.ToString();
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        connection.Open();
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                Console.WriteLine("{0} {1}", reader.GetString(0), reader.GetString(1));
-                            }
-                        }
-                    }                    
-                }
             }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e.ToString() + "blad sql");
-            }
-            Console.ReadLine();
-
-            return View();
+           
         }
     
    
