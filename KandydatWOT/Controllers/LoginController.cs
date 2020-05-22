@@ -20,26 +20,17 @@ namespace KandydatWOT.Controllers
             return View();
         }
         
-        void connectionString()
-        {
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            builder.DataSource = "dwot.database.windows.net";
-            builder.UserID = "patryk";
-            builder.Password = "C3AIo*8s?tUq?d#*as8g";
-            builder.InitialCatalog = "Kandydaci";
-
-            con.ConnectionString = builder.ToString();
-        }
-        
         public ActionResult Dashboard(Account acc)
         {
             acc.Email = Request["username"];
             acc.Password = Request["password"];
             
-            connectionString();
+            var connector = new DbConnector();
+            con.ConnectionString = connector.Connect_String();
+            
             con.Open();
             com.Connection = con;
-            com.CommandText = "select * from uzytkownicy where email="+"'"+acc.Email+"' and haslo='"+acc.Password+"'"; 
+            com.CommandText = "select * from Accounts where Email="+"'"+acc.Email+"' and Password='"+acc.Password+"'"; 
             dr = com.ExecuteReader();
             if (dr.Read())
             {
@@ -53,9 +44,24 @@ namespace KandydatWOT.Controllers
                 Session["Surname"] = acc.Surname;
                 Session["Degree"] = acc.Degree;
                 Session["Type"] = acc.Type;
-                
                 con.Close();
-                return View("Dashboard");
+                switch (acc.Type)
+                {
+                    case 1:
+                        return View("../Dashboard/Dashboard_Admin");
+                    
+                    case 2:
+                        return View("../Dashboard/Dashboard_DWOT");
+                    
+                    case 3:
+                        return View("../Dashboard/Dashboard_Kandydat");
+                    
+                    case 4:
+                        return View("../Dashboard/Dashboard_Rekruter");
+                    
+                    case 5:
+                        return View("../Dashboard/Dashboard_WKU");
+                }
             }
             else
             {
@@ -63,10 +69,10 @@ namespace KandydatWOT.Controllers
                 con.Close();
                 return View("Login_Failed");
             }
-           
+
+            return null;
         }
-
-
+        
         public ActionResult Log_out()
         {
             Session.Abandon();

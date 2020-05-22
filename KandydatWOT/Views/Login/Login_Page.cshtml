@@ -9,7 +9,7 @@
             <div class="account-wall">
                 <img class="profile-img" src="../../favicon.ico"
                     alt="">
-                <form class="form-signin" action="@Url.Action("Dashboard")">
+                <form class="form-signin" action="@Url.Action("Dashboard")" method="post">
                 <input type="text" class="form-control" placeholder="Nazwa użytkownika" required autofocus name="username">
                 <input type="password" class="form-control" placeholder="Hasło" required name="password">
                 <button class="btn btn-lg btn-primary btn-block" type="submit" name="LoginBtn" value="Login">

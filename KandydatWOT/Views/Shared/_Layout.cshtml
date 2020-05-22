@@ -27,6 +27,8 @@
                     }
                     else
                     {
+                       
+                        <li><a href="#">Zalogowany jako: @Session["Name"] @Session["Surname"]</a></li>         
                         <li>@Html.ActionLink("Wyloguj", "Log_out", "Login")</li>
                     }
                 }

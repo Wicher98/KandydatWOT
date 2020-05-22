@@ -27,7 +27,7 @@ namespace KandydatWOT
                 "~/Content/bootstrap.css",
                 "~/Content/site.css",
                 "~/Content/Login_Page.css"
-                ));
+            ));
             
         }
     }
