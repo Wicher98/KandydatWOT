@@ -43,7 +43,17 @@ namespace KandydatWOT.Controllers
             dr = com.ExecuteReader();
             if (dr.Read())
             {
+                acc.Type = dr.GetInt32(6);
+                acc.Degree = dr.GetString(1);
+                acc.Name = dr.GetString(2);
+                acc.Surname = dr.GetString(3);
+                
                 Session["userName"] = acc.Email;
+                Session["Name"] = acc.Name;
+                Session["Surname"] = acc.Surname;
+                Session["Degree"] = acc.Degree;
+                Session["Type"] = acc.Type;
+                
                 con.Close();
                 return View("Dashboard");
             }
@@ -52,11 +62,16 @@ namespace KandydatWOT.Controllers
                 Session["userName"] = "Nie ma usera";
                 con.Close();
                 return View("Login_Failed");
-
             }
            
         }
-    
-   
+
+
+        public ActionResult Log_out()
+        {
+            Session.Abandon();
+            Session.Clear();
+            return View($"../Home/Index");
+        }
     }
 }

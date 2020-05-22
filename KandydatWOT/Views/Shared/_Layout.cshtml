@@ -20,7 +20,16 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("Zaloguj", "Login_Page", "Login")</li>
+                @{
+                    if (Session["Name"] == null)
+                    {
+                        <li>@Html.ActionLink("Zaloguj", "Login_Page", "Login")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Wyloguj", "Log_out", "Login")</li>
+                    }
+                }
             </ul>
         </div>
     </div>
